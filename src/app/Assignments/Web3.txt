@@ -1,0 +1,26 @@
+Homework 3
+14Oct19
+
+In the previous homework you created a signup form with the ability for someone to enter a username and password.  For this homework you will need to add the ability to select or create a Tavern when signing up a user.  If the user is an Admin user they will be a Tavern owner.  If the user is a manager user they will be associated to an existing Tavern.
+ 
+Form updates:
+Add a radio button list that will allow the user to select between 2 roles.
+Admin or Manager
+Hint you can still use ngModel to bind to the result of the radio button the same as you did with your inputs.
+If the user selects Admin
+Display an input for them to type out a tavern name
+If the user selects Manager
+Display a select with a list of taverns to choose from
+Hint: You will want to use *ngIf to toggle the input and select based on the value of the ngModel property you assign to the radio button list
+Hint: You will want to use *ngFor to build a list of Taverns for the select list.
+Add a signup method to the Auth.Service.ts to save your create user for.
+Hint: Your new user object should look something like this once you finish the changes:
+{ UserName: string, Password: string, Tavern: { Id: number, TavernName: string}}
+Notice the Tavern is a nested object.
+The Tavern data can be listed out in an array similar to the sessions we did in the first class.  I would recommend you create a new service the Tavern service to accomplish this.  Then you can return that array to the component and display the values in the select.  The Tavern Id's and Names should match what you already have in your DB so make sure you check your table for the data to put in the Array.  If you don't use that you will have a FK error when you try and save your data.
+ 
+If you are having trouble remember to Read, Search and Ask.  Re-read the requirement, search for the answer online and if you still haven't solved it ask for help!
+
+
+
+-- ngIf

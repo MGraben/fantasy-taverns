@@ -7,13 +7,21 @@
       <label>Password</label>
       <input type="password" class="form-control" [(ngModel)]="password" name="password" />
     </div>
-    <div class="col-md-6"></div>
+    <div class="col-md-6">
+      
+    </div>
+    
   </div>
   <br />
   <div class="row">
     <div class="col-md-6">
       <button type="submit" class="btn btn-primary" (click)="login()">
         Submit
+      </button>
+    </div>
+    <div class="col-md-6">
+      <button type="submit" class="btn btn-primary" routerLink="/signup">
+        Signup
       </button>
     </div>
   </div>

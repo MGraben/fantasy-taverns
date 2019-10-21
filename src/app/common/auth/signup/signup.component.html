@@ -1,0 +1,31 @@
+<h2>Signup</h2>
+<form>
+  <div class="row">
+    <div class="col-md-6">
+      <label>Enter User Name</label>
+      <input type="text" class="form-control" [(ngModel)]="userName" name="userName" />
+      <label>Enter Password</label>
+      <input type="password" class="form-control" [(ngModel)]="password" name="password" />
+    </div>
+    <div class="col-md-6">
+      <input type="radio" id="AdminRole" name="rdrRole" [(ngModel)]="role" value="admin"><label for="Admin">Admin</label>
+      <input type="radio" id="MgrRole" name="rdrRole" [(ngModel)]="role" value="manager"><label for="Manager">Manager</label>
+    </div>
+    <div *ngIf="role === 'admin'">Admin enter Tavern</div>
+    <div *ngIf="role === 'manager'">Manager select Tavern</div>
+   
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-md-6">
+      <button type="signup" class="btn btn-primary" (click)="signup()">
+        Signup
+      </button>
+    </div>
+    <div class="col-md-6">
+      <button type="cancel" class="btn btn-primary" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</form>

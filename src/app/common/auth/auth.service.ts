@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie';
+import { Identifiers } from '@angular/compiler/src/render3/r3_identifiers';
 
 export interface IUser {
     Id: number;
@@ -20,6 +21,12 @@ export interface ILoginResponse {
 export interface ICurrentlyLoggedInUser {
     token: string;
     user: IUser;
+}
+
+export interface ISignupPayload {
+    UserName: string,
+    Password: string,
+    Tavern: { Id: number, TavernName: string }
 }
 
 const tokenCookieKey = 'fantasy-taverns-app-token-cookie';
@@ -59,14 +66,27 @@ export class AuthService {
                 tap((response) => {
                     const currentUser: any =
                         response &&
-                        response.success &&
-                        response.token &&
-                        response.user
+                            response.success &&
+                            response.token &&
+                            response.user
                             ? response
                             : null;
                     this.setUser(currentUser);
                 }),
             );
+    }
+
+    create(userName: string, password: string): Observable<ISignupPayload> {
+        const data: ISignupPayload = {
+            UserName: userName,
+            Password: password,
+            Tavern: {Id: 1, TavernName: "bar"}
+
+
+        };
+        return this.http
+            .post<ISignupPayload>('http://localhost:3000/users', data);
+
     }
 
     logout(): void {
