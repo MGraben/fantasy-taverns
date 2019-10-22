@@ -8,7 +8,8 @@ import { AuthService } from '../auth.service';
 export class SignupComponent {
     userName = '';
     password = '';
-
+    tavernName = '';
+    
     constructor(private router: Router, private authService: AuthService) {}
 
     signup(): void {

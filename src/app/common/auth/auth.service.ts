@@ -76,11 +76,11 @@ export class AuthService {
             );
     }
 
-    create(userName: string, password: string): Observable<ISignupPayload> {
+    create(userName: string, password: string, tavernName: string, tavernId: number): Observable<ISignupPayload> {
         const data: ISignupPayload = {
             UserName: userName,
             Password: password,
-            Tavern: {Id: 1, TavernName: "bar"}
+            Tavern: {Id: tavernId, TavernName: tavernName}
 
 
         };
