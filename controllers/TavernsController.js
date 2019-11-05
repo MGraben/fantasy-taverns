@@ -14,15 +14,15 @@ console.log("before query");
         result = await pool
             .request()
             // .input('UserId', sql.Int, req.user.Id)
-            .query('select * from Taverns' );   //where Id = @UserId'
+            .query('select * from Taverns' );   //where Id = @tavernID'
     } catch (e) {
         throwError(e.message);
     }
-
+    console.log("after query");
     return result.recordset;
 };
 
-console.log("after query");
+
 
 getAll = async function(req, res) {
     // format request
@@ -35,7 +35,7 @@ getAll = async function(req, res) {
     if (err) {
         return returnError(res, err, 422);
     }
-
+    console.log("return getAll Tavernscontroller");
     // return results
     return returnSuccessResponse(res, taverns, 201);
 };
@@ -49,83 +49,126 @@ const test = async function(req,res){
 };
 module.exports.test = test;
 
-// const createUser = async function(userInfo) {
-//     const pool = await poolPromise;
-//     let result;
-//     const roleId = parseInt(userInfo.Tavern.Id) === 0 ? 1 : 2;
+const createUser = async function(userInfo) {
+    const pool = await poolPromise;
+    let result;
+    const roleId = parseInt(userInfo.Tavern.Id) === 0 ? 1 : 2;
+    console.log("return createUser Tavernscontroller");
+    if (parseInt(userInfo.Tavern.Id) === 0) {
+        try {
+            tavernResult = await pool
+                .request()
+                .input('TavernName', sql.VarChar, userInfo.Tavern.TavernName)
+                .query(
+                    'INSERT INTO Taverns ([TavernName]) OUTPUT inserted.* values (@TavernName)',
+                );
+            userInfo.Tavern.Id = tavernResult.recordset.shift().ID;
+            console.log("Created Tavern id: " + userInfo.Tavern.Id);
+        } catch (e) {
+            throwError(e.message);
+        }
+    }
+    userInfo.Password = await hashPassword(userInfo);
 
-//     if (parseInt(userInfo.Tavern.Id) === 0) {
-//         try {
-//             tavernResult = await pool
-//                 .request()
-//                 .input('TavernName', sql.VarChar, userInfo.Tavern.TavernName)
-//                 .query(
-//                     'INSERT INTO Taverns ([TavernName]) OUTPUT inserted.* values (@TavernName)',
-//                 );
-//             userInfo.Tavern.Id = tavernResult.recordset.shift().ID;
-//         } catch (e) {
-//             throwError(e.message);
-//         }
-//     }
-//     userInfo.Password = await hashPassword(userInfo);
+    try {
+        result = await pool
+            .request()
+            .input('UserName', sql.NVarChar, userInfo.UserName)
+            .input('TavernId', sql.Int, userInfo.Tavern.Id)
+            .input('RoleId', sql.Int, roleId)
+            .input('Password', sql.NVarChar, userInfo.Password)
+            .query(
+                'INSERT INTO Users ([UserName], [TavernId], [RoleId], [Password]) OUTPUT inserted.* values (@UserName, @TavernId, @RoleId, @Password)',
+            );
+            console.log('Added Manager');
+    } catch (e) {
+        throwError(e.message);
+        console.log('Create user failed');
+    }
 
-//     try {
-//         result = await pool
-//             .request()
-//             .input('UserName', sql.NVarChar, userInfo.UserName)
-//             .input('TavernId', sql.Int, userInfo.Tavern.Id)
-//             .input('RoleId', sql.Int, roleId)
-//             .input('Password', sql.NVarChar, userInfo.Password)
-//             .query(
-//                 'INSERT INTO Users ([UserName], [TavernId], [RoleId], [Password]) OUTPUT inserted.* values (@UserName, @TavernId, @RoleId, @Password)',
-//             );
-//     } catch (e) {
-//         throwError(e.message);
-//     }
+    return result.recordset[0];
+};
 
-//     return result.recordset[0];
-// };
+module.exports.createUser = createUser;
+create = async function(req, res) {
+    res.setHeader('ContentType', 'application/json');
+    const body = req.body;
 
-// module.exports.createUser = createUser;
-// create = async function(req, res) {
-//     res.setHeader('ContentType', 'application/json');
-//     const body = req.body;
+    if (!body.Password) {
+        return returnError(res, 'Please enter a password to register', 422);
+    }
+    let err, user;
 
-//     if (!body.Password) {
-//         return returnError(res, 'Please enter a password to register', 422);
-//     }
-//     let err, user;
+    [err, user] = await executeOrThrow(createUser(body));
+    if (err) {
+        return returnError(res, err, 422);
+    }
 
-//     [err, user] = await executeOrThrow(createUser(body));
-//     if (err) {
-//         return returnError(res, err, 422);
-//     }
+    return returnSuccessResponse(res, user, 201);
+};
 
-//     return returnSuccessResponse(res, user, 201);
-// };
+module.exports.create = create;
 
-// module.exports.create = create;
+const comparePassword = async function(user, passedPassword) {
+    let err, pass;
 
-// const comparePassword = async function(user, passedPassword) {
-//     let err, pass;
+    if (!user.Password) {
+        throwError('password not set');
+    }
 
-//     if (!user.Password) {
-//         throwError('password not set');
-//     }
+    [err, pass] = await executeOrThrow(
+        bcryptPromise.compare(passedPassword, user.Password),
+    );
+    if (err) {
+        throwError(err);
+    }
 
-//     [err, pass] = await executeOrThrow(
-//         bcryptPromise.compare(passedPassword, user.Password),
-//     );
-//     if (err) {
-//         throwError(err);
-//     }
+    if (!pass) {
+        throwError('invalid password');
+    }
 
-//     if (!pass) {
-//         throwError('invalid password');
-//     }
+    return user;
+};
 
-//     return user;
-// };
+const getMyTavern = async function(req) {
+    const pool = await poolPromise;
+    let result;
+
+console.log("before query");
+    try {
+        result = await pool
+            .request()
+            .input('TavernId', sql.Int, req.tav)
+            .query('select ID from Taverns where Id = @tavernID' )
+    } catch (e) {
+        throwError(e.message);
+    }
+    console.log("after query");
+    return result.recordset;
+};
+
+
+
+getTavern = async function(req, res) {
+    // format request
+    res.setHeader('ContentType', 'application/json');
+
+    let err, tavern;
+
+    // now call the db
+    [err, tavern] = await executeOrThrow(getTaverns(req));
+    if (err) {
+        return returnError(res, err, 422);
+    }
+    console.log("return get Tavernscontroller");
+    // return results
+    return returnSuccessResponse(res, taverns, 201);
+};
+
+module.exports.getTavern = getTavern;
+
+
+
 
 // const authUser = async function(userInfo) {
 //     if (!userInfo.Password) {

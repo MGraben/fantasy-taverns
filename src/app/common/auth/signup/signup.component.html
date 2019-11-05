@@ -12,9 +12,13 @@
       <input type="radio" id="MgrRole" name="rdrRole" [(ngModel)]="role" value="manager"><label for="Manager">Manager</label>
     </div>
     <div *ngIf="role === 'admin'"><label>Enter Tavern Name</label>
-      <input type="text" class="form-control" [(ngModel)]="tavernName" name="tavernName" /></div>
-    <div *ngIf="role === 'manager'"><label>Enter User Name</label>
-      <input type="" class="form-control" [(ngModel)]="userName" name="userName" /></div>
+      <input type="text" class="form-control" [(ngModel)]="tavernName" name="tavernName" />
+    </div>
+    <div *ngIf="role === 'manager'"><label>Select Tavern Name</label>
+      <select class="form-control" [(ngModel)]="selectedtavern" name="tavern">
+        <option *ngFor="let tavern of taverns" [ngValue]="tavern">{{tavern.TavernName}}</option>
+      </select>
+    </div>
    
   </div>
   <br />

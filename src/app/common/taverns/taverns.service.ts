@@ -13,7 +13,7 @@ export interface ITavern {
 }
 
 console.log("ITavern");
-// console.log(JSON.stringify )
+ console.log("In tavern.service for ddl only" );
 @Injectable({
     providedIn: 'root',
 })

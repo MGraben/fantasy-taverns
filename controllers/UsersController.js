@@ -24,7 +24,7 @@ const createUser = async function(userInfo) {
     const pool = await poolPromise;
     let result;
     const roleId = parseInt(userInfo.Tavern.Id) === 0 ? 1 : 2;
-
+    console.log("return createUser Userscontroller");
     if (parseInt(userInfo.Tavern.Id) === 0) {
         try {
             tavernResult = await pool
@@ -34,6 +34,7 @@ const createUser = async function(userInfo) {
                     'INSERT INTO Taverns ([TavernName]) OUTPUT inserted.* values (@TavernName)',
                 );
             userInfo.Tavern.Id = tavernResult.recordset.shift().ID;
+            console.log("Created Tavern id: " + userInfo.Tavern.Id);
         } catch (e) {
             throwError(e.message);
         }
@@ -52,12 +53,14 @@ const createUser = async function(userInfo) {
             );
     } catch (e) {
         throwError(e.message);
+        console.log('Create user failed');
     }
 
     return result.recordset[0];
 };
 
 module.exports.createUser = createUser;
+
 create = async function(req, res) {
     res.setHeader('ContentType', 'application/json');
     const body = req.body;
@@ -69,9 +72,10 @@ create = async function(req, res) {
 
     [err, user] = await executeOrThrow(createUser(body));
     if (err) {
+        console.log('createUser failed: 422');
         return returnError(res, err, 422);
     }
-
+    console.log('Successfully created user');
     return returnSuccessResponse(res, user, 201);
 };
 

@@ -12,4 +12,7 @@ export class TavernsComponent implements OnInit {
     ngOnInit(): void {
         this.tavernsService.getAll().subscribe((taverns) => (this.taverns = taverns));
     }
+
+   
 }
+console.log('taverns.componte.ts');
