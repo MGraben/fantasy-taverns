@@ -13,18 +13,19 @@ import { LoginComponent } from './common/auth/login/login.component';
 import { TokenInterceptor } from './common/auth/token.interceptor';
 import { SignupComponent } from './common/auth/signup/signup.component';
 import { HomeComponent } from './home.component';
-// import { TavernsModule } from './common/taverns/taverns.module';
 import { TavernsComponent } from './common/taverns/taverns.component';
+import { TavernsModule } from './common/taverns/taverns.module';
 
 @NgModule({
     bootstrap: [AppComponent],
-    declarations: [AppComponent, LoginComponent, HomeComponent,SignupComponent,TavernsComponent],
+    declarations: [AppComponent, LoginComponent, HomeComponent,SignupComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
         NgbModule,
+        TavernsModule,
         AppRoutingModule,
         CookieModule.forRoot(),
     ],

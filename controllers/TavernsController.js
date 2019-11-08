@@ -130,7 +130,7 @@ const comparePassword = async function(user, passedPassword) {
     return user;
 };
 
-const getMyTavern = async function(req) {
+const getMyTaverns = async function(req) {
     const pool = await poolPromise;
     let result;
 
@@ -149,14 +149,14 @@ console.log("before query");
 
 
 
-getTavern = async function(req, res) {
+getTaverns = async function(req, res) {
     // format request
     res.setHeader('ContentType', 'application/json');
 
-    let err, tavern;
+    let err, taverns;
 
     // now call the db
-    [err, tavern] = await executeOrThrow(getTaverns(req));
+    [err, taverns] = await executeOrThrow(getMyTaverns(req));
     if (err) {
         return returnError(res, err, 422);
     }
@@ -165,7 +165,7 @@ getTavern = async function(req, res) {
     return returnSuccessResponse(res, taverns, 201);
 };
 
-module.exports.getTavern = getTavern;
+module.exports.getTaverns = getTaverns;
 
 
 

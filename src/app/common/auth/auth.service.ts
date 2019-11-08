@@ -24,6 +24,7 @@ export interface ICurrentlyLoggedInUser {
 }
 
 export interface ISignupPayload {
+    success: boolean;
     UserName: string,
     Password: string,
     Tavern: { Id: number, TavernName: string }
@@ -78,6 +79,7 @@ export class AuthService {
 
     create(userName: string, password: string, tavernName: string, tavernId: number): Observable<ISignupPayload> {
         const data: ISignupPayload = {
+            success: true,
             UserName: userName,
             Password: password,
             Tavern: {Id: tavernId, TavernName: tavernName}

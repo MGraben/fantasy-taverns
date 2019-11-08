@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { TavernService, ITavern } from '../taverns.service';        //'../taverns.service';
+import { TavernsService, IMyTavern } from '../taverns.service';
 
 @Component({
-    templateUrl: './taverns/my-tavern.component.html',
+    templateUrl: './my-tavern.component.html',
 })
-export class TavernComponent implements OnInit {
-    taverns: ITavern[];
+export class MyTavernComponent implements OnInit {
+    Mytaverns: IMyTavern[];
 
-    constructor(private tavernsService: TavernService) {}
+    constructor(private tavernService: TavernsService) {}
 
     ngOnInit(): void {
-        this.tavernsService.getAll().subscribe((tavern) => (this.taverns = tavern));
+        this.tavernService.getMyAll().subscribe((tavern) => (this.Mytaverns = tavern));
     }
 }

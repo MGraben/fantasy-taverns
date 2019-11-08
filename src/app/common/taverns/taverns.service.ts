@@ -10,6 +10,10 @@ export interface ITavern {
     Id: number;
     TavernName: string;
     
+}export interface IMyTavern {
+    Id: number;
+    TavernName: string;
+    
 }
 
 console.log("ITavern");
@@ -17,14 +21,16 @@ console.log("ITavern");
 @Injectable({
     providedIn: 'root',
 })
-export class TavernService {
+export class TavernsService {
     constructor(private http: HttpClient) {}
     
         getAll(): Observable<ITavern[]> {
             return this.http.get<ITavern[]>('http://localhost:3000/taverns');
         }
     
- 
+        getMyAll(): Observable<IMyTavern[]> {
+            return this.http.get<IMyTavern[]>('http://localhost:3000/my-taverns');
+        }
 
 
     
@@ -46,3 +52,5 @@ export class TavernService {
 
     
 }
+
+

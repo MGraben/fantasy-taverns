@@ -9,10 +9,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { TavernsRoutingModule } from './taverns-routing.module';
 import { TavernsComponent } from './taverns.component';
+import { MyTavernComponent } from './my-tavern/my-tavern.component';
 
 
 @NgModule({
-    declarations: [TavernsComponent],
+    declarations: [TavernsComponent,MyTavernComponent],
     imports: [
         CommonModule,
         FormsModule,

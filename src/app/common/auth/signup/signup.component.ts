@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { TavernService, ITavern } from '../../taverns/taverns.service';
+import { TavernsService, ITavern } from '../../taverns/taverns.service';
 
 @Component({
     templateUrl: './signup.component.html',
@@ -10,7 +10,7 @@ import { TavernService, ITavern } from '../../taverns/taverns.service';
 
 export class SignupComponent implements OnInit {
 
-    constructor(private router: Router, private authService: AuthService, private tavernsService: TavernService) {}
+    constructor(private router: Router, private authService: AuthService, private tavernsService: TavernsService) {}
 
     ngOnInit(): void {
         this.tavernsService.getAll().subscribe((taverns) => (this.taverns = taverns));
